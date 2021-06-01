@@ -1,21 +1,24 @@
 # Vakinha Web Scraping
 
-Script python para varrer o site do [Vakinha](https://www.vakinha.com.br/) e exportar suas campanhas, valores arrecadados e metas para um CSV ou JSON.
+Python script to obtain campaigns from [Vakinha.com.br](https://www.vakinha.com.br/), and export them to a CSV or JSON file containing their names, collected amounts so far, and campaign goals.
 
-## Parâmetros
+## Parameters
 
-Script aceita dois parâmetros:
+| Name   | Short | Long     | Type   | Default | Supported Values |
+| ------ | ----- | -------- | ------ | ------- | ---------------- |
+| Output | -o    | --output | string | csv     | 'csv' or 'json'  |
+| Pages  | -p    | --pages  | int    | 1       | -                |
 
-- Tipo de output: csv ou json
-
-- Total de páginas à serem varridas
-
-## Exemplos
+## Samples
 
 ```bash
-python vakinha.py csv 3 # obtém as campanhas das 3 primeiras páginas em CSV
+python vakinha.py # first page into a CSV file
 ```
 
 ```bash
-python vakinha.py json 15 # obtém as campanhas das primeiras 15 páginas em JSON
+python vakinha.py -o csv -p 3 # first 3 pages into a CSV file
+```
+
+```bash
+python vakinha.py -o json -p 15 # first 15 pages into a json file
 ```
