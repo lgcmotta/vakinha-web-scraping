@@ -102,17 +102,26 @@ total_pages = int(args.pages)
 
 base_url = 'https://www.vakinha.com.br'
 
+print('Scraping script started.')
+
 trees = get_html_trees()
+
+print('Total of {total_pages} page(s) were scraped successfully'.format(
+    total_pages=total_pages))
+
+print('Extracting campaigns data...')
 
 campaigns = extract_campaings(trees=trees)
 
-print('Writing campaigns content into "campanhas.{extension}" file'.format(
-    extension=output_type))
+file_name = 'campanhas.{extension}'.format(extension=output_type)
+
+print('Writing campaigns content into "{file_name}" file'.format(
+    file_name=file_name))
 
 write_json_file(campaigns=campaigns) if output_type == 'json' else write_csv_file(
     campaigns=campaigns)
 
-print('Vakinha campaigns were scraped and saved into the "campanhas.{extension}" file.'.format(
-    extension=output_type))
+print('Total of {campaigns_size} campaigns were scraped and saved into the "{file_name}" file.'.format(campaigns_size=len(campaigns),
+                                                                                                       file_name=file_name))
 
 sys.exit(0)
