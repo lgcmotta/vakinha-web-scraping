@@ -106,12 +106,13 @@ trees = get_html_trees()
 
 campaigns = extract_campaings(trees=trees)
 
-if output_type == 'json':
-    print('Writing json file')
-    write_json_file(campaigns=campaigns)
-elif output_type == 'csv':
-    print('Writing csv file')
-    write_csv_file(campaigns=campaigns)
+print('Writing campaigns content into "campanhas.{extension}" file'.format(
+    extension=output_type))
+
+write_json_file(campaigns=campaigns) if output_type == 'json' else write_csv_file(
+    campaigns=campaigns)
 
 print('Vakinha campaigns were scraped and saved into the "campanhas.{extension}" file.'.format(
     extension=output_type))
+
+sys.exit(0)
