@@ -2,6 +2,12 @@
 
 Python script to obtain campaigns from [Vakinha.com.br](https://www.vakinha.com.br/), and export them to a CSV or JSON file containing their names, collected amounts so far, and campaign goals.
 
+## Installation
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Parameters
 
 | Name   | Short | Long     | Type   | Default | Supported Values |
