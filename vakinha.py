@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# encoding: utf-8
 
 from lxml import html
 import requests
@@ -91,8 +92,8 @@ args = parser.parse_args()
 
 output_type = args.output
 
-if output_type != 'json' or output_type != 'csv':
-    print(parser.print_help())
+if output_type != 'json' and output_type != 'csv':
+    parser.print_help()
     sys.exit(1)
 
 first_page = 1
