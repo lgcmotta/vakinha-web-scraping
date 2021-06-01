@@ -13,9 +13,9 @@ pip install -r requirements.txt
 | Name   | Short | Long     | Type   | Default | Supported Values |
 | ------ | ----- | -------- | ------ | ------- | ---------------- |
 | Output | -o    | --output | string | csv     | 'csv' or 'json'  |
-| Pages  | -p    | --pages  | int    | 1       | -                |
+| Pages  | -p    | --pages  | int    | 1       | n/a              |
 
-## Samples
+## Usage Samples
 
 ```bash
 python vakinha.py # first page into a CSV file
