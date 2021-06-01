@@ -3,6 +3,7 @@
 from lxml import html
 import requests
 import json
+import argparse
 import sys
 
 
@@ -33,15 +34,18 @@ def get_campaigns_goals(tree):
 
 
 def append_campaings_per_page(campaigns_names, campaigns_values, campaigns_goals):
+    campaigns = []
     for index in range(len(campaigns_names)):
         campaigns.append({
             "nome": campaigns_names[index],
             "valorArrecadado": campaigns_values[index].replace('Arrecadado R$ ', ''),
             "meta": 0.00 if campaigns_goals[index] == 'Sem meta' else campaigns_goals[index].replace('Meta R$ ', '')
         })
+    return campaigns
 
 
 def extract_campaings(trees):
+    campaigns = []
     for tree in trees:
         campaigns_names = get_campaigns_names(tree=tree)
 
@@ -49,12 +53,12 @@ def extract_campaings(trees):
 
         campaigns_goals = get_campaigns_goals(tree=tree)
 
-        append_campaings_per_page(campaigns_names=campaigns_names,
-                                  campaigns_values=campaigns_values, campaigns_goals=campaigns_goals)
+        campaigns += append_campaings_per_page(campaigns_names=campaigns_names,
+                                               campaigns_values=campaigns_values, campaigns_goals=campaigns_goals)
+    return campaigns
 
 
-def write_json_file():
-    print('Writing json file')
+def write_json_file(campaigns):
     with open('campanhas.json', 'w', encoding='utf-8') as file:
         file.truncate(0)
         file.write(json.dumps(campaigns, indent=2, ensure_ascii=False))
@@ -65,8 +69,7 @@ def map_to_csv_line(campaign):
     return '{name};{value};{goal}\n'.format(name=campaign["nome"], value=campaign['valorArrecadado'], goal=campaign['meta'])
 
 
-def write_csv_file():
-    print('Writing csv file')
+def write_csv_file(campaigns):
     with open('campanhas.csv', 'w', encoding='utf-8') as file:
         file.truncate(0)
         header = 'Campanha;Valor Arrecadado;Meta\n'
@@ -77,25 +80,37 @@ def write_csv_file():
         file.close()
 
 
-output_type = sys.argv[1]
+parser = argparse.ArgumentParser()
 
-if not output_type:
-    sys.stderr.write("Usage: %s [binding_key]...\n" % sys.argv[0])
+parser.add_argument(
+    '--output', '-o', help="output type format, accept 'json' or 'csv'", type=str, default='csv')
+parser.add_argument(
+    '--pages', '-p', help="number of pages that will be scraped", type=int, default=1)
+
+args = parser.parse_args()
+
+output_type = args.output
+
+if output_type != 'json' or output_type != 'csv':
+    print(parser.print_help())
     sys.exit(1)
 
 first_page = 1
 
-total_pages = int(sys.argv[2])
+total_pages = int(args.pages)
 
 base_url = 'https://www.vakinha.com.br'
 
 trees = get_html_trees()
 
-campaigns = []
-
-extract_campaings(trees=trees)
+campaigns = extract_campaings(trees=trees)
 
 if output_type == 'json':
-    write_json_file()
+    print('Writing json file')
+    write_json_file(campaigns=campaigns)
 elif output_type == 'csv':
-    write_csv_file()
+    print('Writing csv file')
+    write_csv_file(campaigns=campaigns)
+
+print('Vakinha campaigns were scraped and saved into the "campanhas.{extension}" file.'.format(
+    extension=output_type))
